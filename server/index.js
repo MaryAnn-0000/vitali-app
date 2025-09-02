@@ -32,7 +32,13 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors(corsOptions));
+// Temporary - very permissive CORS for testing
+app.use(cors({
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
