@@ -1,6 +1,10 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config({ override: true });
+
+// Only load dotenv in development
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 
 // Add debugging to confirm which file is being loaded
 //console.log('Loading .env from:', path.join(__dirname, '.env'));
