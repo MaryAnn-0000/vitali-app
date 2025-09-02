@@ -1,12 +1,7 @@
 const mysql = require('mysql2/promise');
 
 const pool = process.env.DATABASE_URL 
-    ? mysql.createPool({
-        uri: process.env.DATABASE_URL,
-        waitForConnections: true,
-        connectionLimit: 10,
-        queueLimit: 0
-    })
+    ? mysql.createPool(process.env.DATABASE_URL)
     : mysql.createPool({
         host: process.env.DB_HOST || 'localhost',
         user: process.env.DB_USER || 'root',
