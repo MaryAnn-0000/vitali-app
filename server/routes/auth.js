@@ -76,22 +76,28 @@ router.post('/login', [
 
         const { email, password } = req.body;
 
-        // Find user
+        console.log('Attempting to find user with email:', email);
         const [users] = await pool.query(
             'SELECT id, full_name, email, password FROM users WHERE email = ?',
             [email]
         );
+        console.log('Query result:', users);
 
-        if (users.length === 0) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+        if (!users || users.length === 0) {
+            console.log('No user found with email:', email);
+            return res.status(400).json({ message: 'Invalid credentials - user not found' });
         }
 
         const user = users[0];
+        console.log('User found:', { id: user.id, email: user.email });
 
         // Check password
+        console.log('Comparing passwords...');
         const isPasswordValid = await bcrypt.compare(password, user.password);
+        console.log('Password valid:', isPasswordValid);
+        
         if (!isPasswordValid) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            return res.status(400).json({ message: 'Invalid credentials - password mismatch' });
         }
 
         // Generate JWT
@@ -111,8 +117,15 @@ router.post('/login', [
             }
         });
     } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({ message: 'Server error' });
+        console.error('Login error details:', {
+            message: error.message,
+            stack: error.stack,
+            code: error.code
+        });
+        res.status(500).json({ 
+            message: 'Server error',
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 });
 
