@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { bmiAPI } from '../services/api';
 
+import { useNavigate } from 'react-router-dom';
+
 const BMIForm = ({ onBMICalculated }) => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         weight: '',
         height: ''
@@ -28,6 +31,7 @@ const BMIForm = ({ onBMICalculated }) => {
             });
 
             onBMICalculated(response.data);
+            navigate('/bmi-result');
         } catch (error) {
             setError(error.response?.data?.message || 'Failed to calculate BMI');
         } finally {

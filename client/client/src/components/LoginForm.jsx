@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const LoginForm = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -27,9 +28,14 @@ const LoginForm = () => {
 
         if (!result.success) {
             setError(result.error);
+            setLoading(false);
+            return;
         }
 
         setLoading(false);
+        // Remove any existing splash_shown flag to ensure splash screen shows
+        localStorage.removeItem('splash_shown');
+        navigate('/dashboard');
     };
 
     return (

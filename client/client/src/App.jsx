@@ -46,15 +46,9 @@ const AppContent = () => {
 
   const handleBMICalculated = (data) => {
     setBmiResult(data);
+    // Store the result in localStorage in case of page refresh
+    localStorage.setItem('bmi_result', JSON.stringify(data));
   };
-
-  if (showSplash) {
-    return <SplashScreen onComplete={handleSplashComplete} />;
-  }
-
-  if (bmiResult) {
-    return <BMIResult bmiData={bmiResult} />;
-  }
 
   return (
     <Router>
@@ -77,7 +71,24 @@ const AppContent = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
+        <Route
+          path="/bmi-result"
+          element={
+            <ProtectedRoute>
+              {bmiResult ? <BMIResult bmiData={bmiResult} /> : <Navigate to="/dashboard" />}
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/"
+          element={
+            showSplash ? (
+              <SplashScreen onComplete={handleSplashComplete} />
+            ) : (
+              <Navigate to={user ? "/dashboard" : "/login"} />
+            )
+          }
+        />
       </Routes>
     </Router>
   );

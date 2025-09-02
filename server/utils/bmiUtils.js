@@ -3,7 +3,8 @@
 const calculateBMI = (weight, height) => {
     // Convert height from cm to meters
     const heightInMeters = height / 100;
-    return (weight / (heightInMeters * heightInMeters)).toFixed(1);
+    // Calculate BMI and round to 1 decimal place
+    return Number((weight / (heightInMeters * heightInMeters)).toFixed(1));
 };
 
 const getBMICategory = (bmi) => {

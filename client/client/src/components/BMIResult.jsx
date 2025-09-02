@@ -6,7 +6,9 @@ const BMIResult = ({ bmiData }) => {
     const navigate = useNavigate();
 
     const handleGoToDashboard = () => {
-        navigate('/dashboard');
+        // Clear the BMI result from both localStorage and parent state
+        localStorage.removeItem('bmi_result');
+        window.location.href = '/dashboard'; // Force a full page navigation
     };
 
     return (
@@ -26,7 +28,7 @@ const BMIResult = ({ bmiData }) => {
                 >
                     <div className="text-center">
                         <div className="text-6xl font-bold mb-2" style={{ color: bmiData.textColor }}>
-                            {bmiData.bmi}
+                            {Number(bmiData.bmi).toFixed(1)}
                         </div>
                         <div className="text-xl font-semibold mb-4" style={{ color: bmiData.textColor }}>
                             {bmiData.category}

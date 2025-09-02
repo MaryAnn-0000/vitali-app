@@ -4,6 +4,15 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { useAuth } from '../contexts/AuthContext';
 import { bmiAPI } from '../services/api';
 
+// BMI category helper function
+const getBMICategory = (bmi) => {
+    const bmiValue = parseFloat(bmi);
+    if (bmiValue < 18.5) return { category: 'Underweight' };
+    if (bmiValue < 25) return { category: 'Healthy' };
+    if (bmiValue < 30) return { category: 'Overweight' };
+    return { category: 'Obese' };
+};
+
 const Dashboard = () => {
     const [latestBMI, setLatestBMI] = useState(null);
     const [bmiHistory, setBmiHistory] = useState([]);
@@ -50,7 +59,7 @@ const Dashboard = () => {
     const formatChartData = (history) => {
         return history.map(record => ({
             date: new Date(record.createdAt).toLocaleDateString(),
-            bmi: parseFloat(record.bmi),
+            bmi: Number(parseFloat(record.bmi).toFixed(1)),
             weight: record.weight,
             height: record.height
         }));
@@ -123,7 +132,7 @@ const Dashboard = () => {
                             <h2 className="text-xl font-semibold text-gray-900 mb-4">Latest BMI</h2>
                             <div className="text-center">
                                 <div className="text-5xl font-bold mb-2" style={{ color: latestBMI.textColor }}>
-                                    {latestBMI.bmi}
+                                    {Number(latestBMI.bmi).toFixed(1)}
                                 </div>
                                 <div className="text-lg font-semibold mb-4" style={{ color: latestBMI.textColor }}>
                                     {latestBMI.category}
@@ -144,17 +153,36 @@ const Dashboard = () => {
                             <h2 className="text-xl font-semibold text-gray-900 mb-4">BMI History</h2>
                             <div className="h-64">
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <LineChart data={formatChartData(bmiHistory)}>
+                                    <LineChart 
+                                        data={formatChartData(bmiHistory)}
+                                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                                    >
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="date" />
                                         <YAxis domain={['dataMin - 2', 'dataMax + 2']} />
-                                        <Tooltip />
+                                        <Tooltip contentStyle={{ backgroundColor: 'white', border: 'none' }} />
                                         <Line
                                             type="monotone"
                                             dataKey="bmi"
+                                            name="BMI"
                                             stroke="#E63946"
                                             strokeWidth={2}
+                                            label={props => {
+                                                const { x, y, value } = props;
+                                                return (
+                                                    <text 
+                                                        x={x} 
+                                                        y={y - 10} 
+                                                        fill="#E63946" 
+                                                        textAnchor="middle"
+                                                        fontSize="12"
+                                                    >
+                                                        {Number(value).toFixed(1)}
+                                                    </text>
+                                                );
+                                            }}
                                             dot={{ fill: '#E63946', strokeWidth: 2, r: 4 }}
+                                            activeDot={{ r: 6, fill: '#E63946' }}
                                         />
                                     </LineChart>
                                 </ResponsiveContainer>
