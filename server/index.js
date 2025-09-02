@@ -43,7 +43,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Add CORS headers to all responses
-/*
+
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
@@ -52,7 +52,7 @@ app.use((req, res, next) => {
         return res.status(204).end();
     }
     next();
-});*/
+});
 app.use(express.urlencoded({ extended: true }));
 
 // Test database connection on startup
