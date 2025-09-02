@@ -22,8 +22,8 @@ router.post('/register', [
         const { name, email, password } = req.body;
 
         // Check if user already exists
-        const { rows: existingUsers } = await pool.query(
-            'SELECT id FROM users WHERE email = $1',
+        const [existingUsers] = await pool.query(
+            'SELECT id FROM users WHERE email = ?',
             [email]
         );
 
@@ -36,8 +36,8 @@ router.post('/register', [
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         // Create user
-        const result = await pool.query(
-            'INSERT INTO users (full_name, email, password) VALUES ($1, $2, $3) RETURNING id',
+        const [result] = await pool.query(
+            'INSERT INTO users (full_name, email, password) VALUES (?, ?, ?)',
             [name, email, hashedPassword]
         );
 
@@ -77,8 +77,8 @@ router.post('/login', [
         const { email, password } = req.body;
 
         // Find user
-        const { rows: users } = await pool.query(
-            'SELECT id, full_name, email, password FROM users WHERE email = $1',
+        const [users] = await pool.query(
+            'SELECT id, full_name, email, password FROM users WHERE email = ?',
             [email]
         );
 
