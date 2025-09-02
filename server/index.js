@@ -8,7 +8,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 // CORS Configuration
 const corsOptions = {
-    origin: '*', // Allow all origins for now
+    origin: [
+        'https://vitali-app-six.vercel.app',  // Your deployed frontend
+        'http://localhost:3000',              // For local development
+        'http://localhost:5173',              // If using Vite locally
+    ], // Allow all origins for now
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
