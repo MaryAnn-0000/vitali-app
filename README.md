@@ -1,3 +1,5 @@
+LIVE LINK: https://vitali-app-six.vercel.app/
+
 # Vitali — BMI Health Web App
 
 A full-stack BMI tracking application built with React, Node.js, Express, and MySQL. Track your BMI over time and get personalized health recommendations.
